@@ -2,15 +2,18 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const Contact = require("./models/Contact");
-const User = require("./models/User");
+const Contact = require("./models/contact");
+const User = require("./models/user");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://127.0.0.1:27017/contact_db", {
+// Use environment variables for MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/contact_db";
+
+mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -69,7 +72,8 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-const PORT = 3000;
+// Use environment variable for port
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
